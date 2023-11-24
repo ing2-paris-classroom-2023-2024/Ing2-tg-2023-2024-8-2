@@ -68,3 +68,40 @@ void diplayGraph(graphe_t *graph)
         printf("\n");
     }
 }
+
+void displayLineInfos(assemblyLine_t *line)
+{
+    char c;
+    int count = 0;
+
+    system("cls");
+    displayLogoECE();
+
+    printColor(GREEN, "\n\n   - Temps de cycle: ");
+    printf("\n\n       %.2f", line->cycleTime);
+
+    printColor(GREEN, "\n\n   - Operations: ");
+    for (int i = 0; i < line->nbOpe; i++) {
+        if (i % 5 == 0)
+            printf("\n\n       ");
+        printf("%d: %.2fs", line->ope[i]->id, line->ope[i]->time);
+        if (line->ope[i]->id > 9)
+            printf("  ");
+        else
+            printf("   ");
+    }
+
+    printColor(GREEN, "\n\n   - Exlusion: ");
+    for (int i = 0; i < line->nbOpe; i++)
+        for (int j = 0; j < line->nbOpe; j++) {
+            if (line->unassociable[i][j] && i < j) {
+                if (count % 8 == 0)
+                    printf("\n\n       ");
+                printf("%d-%d  ", line->ope[i]->id, line->ope[j]->id);
+                count++;
+            }
+        }
+
+    gets(&c);
+    gets(&c);
+}

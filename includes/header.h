@@ -1,6 +1,7 @@
 #ifndef HEADER_H
-#define HEADER_H
+    #define HEADER_H
 
+#include <stdio.h>
 #include "struct.h"
 
 #define MAX_INT 2147483647
@@ -22,13 +23,14 @@ double sortByCycleTime(assemblyLine_t *line, bool isSortByAssociable);
 double kahnAlgorithm(assemblyLine_t *line, bool isSortByTime, bool isSortByAssociable);
 
 // loadGraph
-graphe_t *loadGraph(void);
+graphe_t *loadGraph(FILE *fp);
 sommet_t *getSommetById(sommet_t **sommets, int id);
 void resetDeg(graphe_t *graph);
 
 // loadAssemblyLine
 assemblyLine_t *loadAssemblyLine(void);
 void createWorkStations(assemblyLine_t *line);
+char *catPath(char *str1, char *str2);
 
 // linkedList
 maillon_t *addMaillon(maillon_t *maillon, ope_t *ope);
@@ -38,21 +40,30 @@ int getLen(maillon_t *list);
 // free
 void freeAssemblyLine(assemblyLine_t *line);
 void freeWorkStation(assemblyLine_t *line);
+void freeGraph(graphe_t *graphe);
 
 // menu
-void menu(assemblyLine_t *line);
+void getConstraints(bool *isSortByAssociable, bool *isSortByTime, bool *isSortByPred);
+int getChoice(void);
+void displayConstraints(assemblyLine_t *line,  bool isSortByAssociable, bool isSortByTime, bool isSortByPred);
+void getCycleTime(assemblyLine_t *line);
+void getBestLoss(assemblyLine_t *line);
 
 // display
 void displayWorkStation(assemblyLine_t *line);
 void printColor(char *color, char *str);
 void displayLogoECE(void);
 double getLoss(assemblyLine_t *line, int nbStation, double totalTime);
+void displayLineInfos(assemblyLine_t *line);
 
 // quickSort
 void quickSort(ope_t **ope, int left, int right);
+void bubbleSort(double arr[], char str[7][85]);
 
 // unassociable
 double sortByUnassociable(assemblyLine_t *line);
 void getTimeStation(workStation_t **workStation);
+
+char *getDirectory(void);
 
 #endif /*HEADER_H*/

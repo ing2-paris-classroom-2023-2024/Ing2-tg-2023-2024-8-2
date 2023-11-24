@@ -52,17 +52,21 @@ int getChoice(void)
         displayLogoECE();
         printColor(GREEN, "\n\nMenu :\n\n");
         printColor(CYAN, "   1 - ");
-        printf("Choix des contraintes\n\n");
+        printf("Charger une ligne d'assemblage\n\n");
         printColor(CYAN, "   2 - ");
-        printf("Trouver automatiquement les meilleures contraintes\n\n");
+        printf("Choix des contraintes\n\n");
         printColor(CYAN, "   3 - ");
-        printf("Changer le temps de cycle\n\n");
+        printf("Trouver automatiquement les meilleures contraintes\n\n");
         printColor(CYAN, "   4 - ");
+        printf("Changer le temps de cycle\n\n");
+        printColor(CYAN, "   5 - ");
+        printf("Afficher les infos de la ligne d'assemblage\n\n");
+        printColor(CYAN, "   6 - ");
         printf("Quitter\n\n");
         printf("Choix:  ");
         fflush(stdin);
         scanf("%d", &choice);
-    } while (choice < 1 || choice > 4);
+    } while (choice < 1 || choice > 6);
 }
 
 void displayConstraints(assemblyLine_t *line,  bool isSortByAssociable, bool isSortByTime, bool isSortByPred)
@@ -182,36 +186,4 @@ void getBestLoss(assemblyLine_t *line)
     }
     gets(&c);
     gets(&c);
-}
-
-void menu(assemblyLine_t *line)
-{
-    int choice;
-    bool isSortByAssociable, isSortByTime, isSortByPred;
-
-    while (choice != 4) {
-        isSortByAssociable = false;
-        isSortByPred = false;
-        isSortByTime = false;
-        choice = getChoice();
-
-        switch (choice)
-        {
-        case 1:
-            getConstraints(&isSortByAssociable, &isSortByTime, &isSortByPred);
-            displayConstraints(line, isSortByAssociable, isSortByTime, isSortByPred);
-            break;
-        
-        case 2:
-            getBestLoss(line);
-            break;
-
-        case 3:
-            getCycleTime(line);
-            break;
-        
-        default:
-            break;
-        }
-    }
 }

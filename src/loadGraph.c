@@ -1,5 +1,7 @@
 #include <stdlib.h>
 #include <stdio.h>
+#include <sys/types.h>
+#include <dirent.h>
 #include "header.h"
 
 void resetDeg(graphe_t *graph)
@@ -73,24 +75,27 @@ void initGraph(graphe_t *graphe, FILE *fp)
     }
 }
 
-FILE *getFile(void)
+char *getDirectory(void)
 {
-    FILE *fp;
-    char filepath[50] = "../data/subject/graphe";
+    DIR *d;
+    char *filepath = malloc(sizeof(char) * 100);
 
+    handleMalloc(filepath);
     do {
-        // printf("Choisir le chemin du fichier graphe:\n");
-        // scanf("%s", filepath);
-        fp = fopen(filepath, "r");
-    } while (fp == NULL);
+        system("cls");
+        displayLogoECE();
+        printColor(PURPLE, "\n\nRentrez l'adresse du dossier de votre ligne d'assemblage:\n\n   ");
+        fflush(stdin);
+        scanf("%s", filepath);
+        d = opendir(filepath);
+    } while (d == NULL);
 
-    return fp;
+    return filepath;
 }
 
-graphe_t *loadGraph(void)
+graphe_t *loadGraph(FILE *fp)
 {
     graphe_t *graphe = malloc(sizeof(graphe_t));
-    FILE *fp = getFile();
 
     handleMalloc(graphe);
     fscanf(fp, "%d", &graphe->ordre);
@@ -108,8 +113,6 @@ graphe_t *loadGraph(void)
     fscanf(fp, "%d", &graphe->taille);
 
     initGraph(graphe, fp);
-
-    fclose(fp);
 
     return graphe;
 }

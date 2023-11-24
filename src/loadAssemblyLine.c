@@ -1,17 +1,30 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 #include "header.h"
 
-FILE *loadFile(void)
+char *catPath(char *str1, char *str2)
 {
-    FILE *fp;
-    char filepath[50] = "../data/subject/ligneAssemblage";
+    int len = strlen(str1);
+    int len2 = strlen(str2);
+    char *fullPath = malloc(sizeof(char) * (len + len2 + 1));
 
-    do {
-        // printf("Choose data filepath:\n");
-        // scanf("%s", filepath);
-        fp = fopen(filepath, "r");
-    } while (fp == NULL);
+    strcpy(fullPath, str1);
+    if (str1[len - 1] != '/')
+        strcat(fullPath, "/");
+    strcat(fullPath, str2);
+
+    return fullPath;
+}
+
+FILE *loadFile(char *filepath)
+{
+    FILE *fp = fopen(filepath, "r");
+
+    if (fp == NULL) {
+        printf("Le fichier suivant n'existe pas: %s\n", filepath);
+        exit(EXIT_FAILURE);
+    }
 
     return fp;
 }
@@ -71,15 +84,23 @@ void createWorkStations(assemblyLine_t *line)
 assemblyLine_t *loadAssemblyLine(void) // Fonction à aménager -> nouveau sujet
 {
     assemblyLine_t *line = malloc(sizeof(assemblyLine_t));
-    FILE *fp = loadFile(); //
+    char *filepath = getDirectory();
+    char *graphPath = catPath(filepath, "graphe");
+    char *linePath = catPath(filepath, "ligneAssemblage");
+    FILE *fp = loadFile(linePath); //
+    FILE *fp2 = loadFile(graphPath);
 
     handleMalloc(line);
     getAllOpe(line, fp); //
     getAllUnassociable(line, fp); //
     createWorkStations(line);
-    line->graph = loadGraph();
-    
+    line->graph = loadGraph(fp2);
+
     fclose(fp);
+    fclose(fp2);
+    free(filepath);
+    free(graphPath);
+    free(linePath);
 
     return line;
 }

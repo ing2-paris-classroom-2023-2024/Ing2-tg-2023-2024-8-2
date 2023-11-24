@@ -1,5 +1,5 @@
 #ifndef GRAPHSTRUCT_H
-#define GRAPHSTRUCT_H
+    #define GRAPHSTRUCT_H
 
 typedef struct arc_s {
     struct arc_s *next;
