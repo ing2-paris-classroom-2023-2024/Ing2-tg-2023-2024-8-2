@@ -1,6 +1,8 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <sys/stat.h>
+#include <fcntl.h>
 #include "header.h"
 
 char *catPath(char *str1, char *str2)
@@ -17,21 +19,53 @@ char *catPath(char *str1, char *str2)
     return fullPath;
 }
 
-FILE *loadFile(char *filepath)
+int getNbLine(char *filepath)
 {
-    FILE *fp = fopen(filepath, "r");
+    struct stat sb;
+    ssize_t rd;
+    FILE *fp;
+    char *buffer;
+    int fd = open(filepath, O_RDONLY);
+    int count = 0;
 
-    if (fp == NULL) {
-        printf("Le fichier suivant n'existe pas: %s\n", filepath);
-        exit(EXIT_FAILURE);
+    stat(filepath, &sb);
+    if (sb.st_size == 0)
+        return -1;
+    buffer = malloc(sizeof(char) * (sb.st_size + 1));
+    handleMalloc(buffer);
+
+    if (fd != -1)
+        rd = read(fd, buffer, sb.st_size);
+    else {
+        free(buffer);
+        return -1;
     }
+    if (rd < 0) {
+        free(buffer);
+        return -1;
+    } else
+        buffer[rd] = '\0';
 
-    return fp;
+    for (int i = 0; buffer[i] != '\0'; i++)
+        if (buffer[i] == '\n')
+            count++;
+    count++;
+
+    close(fd);
+    free(buffer);
+
+    return count;
 }
 
-void getAllOpe(assemblyLine_t *line, FILE *fp)
+int getOpe(assemblyLine_t *line, char *filepath)
 {
-    fscanf(fp, "%d%lf", &line->nbOpe, &line->cycleTime);
+    int nbLine = getNbLine(filepath);
+    FILE *fp = fopen(filepath, "r");
+
+    if (nbLine == -1 || fp == NULL)
+        return -1;
+
+    line->nbOpe = nbLine;
     line->ope = malloc(sizeof(ope_t *) * (line->nbOpe + 1));
     handleMalloc(line->ope);
     line->ope[line->nbOpe] = NULL;
@@ -39,15 +73,32 @@ void getAllOpe(assemblyLine_t *line, FILE *fp)
     for (int i = 0; i < line->nbOpe; i++) {
         line->ope[i] = malloc(sizeof(ope_t));
         handleMalloc(line->ope[i]);
-        fscanf(fp, "%lf", &line->ope[i]->time);
-        line->ope[i]->id = i + 1;
+        fscanf(fp, "%d%lf", &line->ope[i]->id, &line->ope[i]->time);
     }
+    fclose(fp);
+    
+    return 0;
 }
 
-void getAllUnassociable(assemblyLine_t *line, FILE *fp)
+int getIndexById(ope_t **ope, int id)
 {
-    int nbUnassociable;
+    for (int i = 0; ope[i] != NULL; i++)
+        if (ope[i]->id == id)
+            return i;
+
+    printf("Error: operation not found\n");
+    exit(EXIT_FAILURE);
+}
+
+int getUnassociable(assemblyLine_t *line, char *filepath)
+{
+    int nbLine = getNbLine(filepath);
+    FILE *fp = fopen(filepath, "r");
     int opeA, opeB;
+    int indexA, indexB;
+
+    if (nbLine == -1 || fp == NULL)
+        return -1;
 
     line->unassociable = malloc(sizeof(bool *) * line->nbOpe);
     handleMalloc(line->unassociable);
@@ -57,15 +108,17 @@ void getAllUnassociable(assemblyLine_t *line, FILE *fp)
         for (int j = 0; j < line->nbOpe; j++)
             line->unassociable[i][j] = false;
     }
-    
-    fscanf(fp, "%d", &nbUnassociable);
 
-    for (int i = 0; i < nbUnassociable; i++) {
+    for (int i = 0; i < nbLine; i++) {
         fscanf(fp, "%d%d", &opeA, &opeB);
-        line->unassociable[opeA - 1][opeB - 1] = true;
-        line->unassociable[opeB - 1][opeA - 1] = true;
+        indexA = getIndexById(line->ope, opeA);
+        indexB = getIndexById(line->ope, opeB);
+        line->unassociable[indexA][indexB] = true;
+        line->unassociable[indexB][indexA] = true;
     }
+    fclose(fp);
 
+    return 0;
 }
 
 void createWorkStations(assemblyLine_t *line)
@@ -84,23 +137,32 @@ void createWorkStations(assemblyLine_t *line)
 assemblyLine_t *loadAssemblyLine(void) // Fonction à aménager -> nouveau sujet
 {
     assemblyLine_t *line = malloc(sizeof(assemblyLine_t));
+    FILE *fp;
     char *filepath = getDirectory();
-    char *graphPath = catPath(filepath, "graphe");
-    char *linePath = catPath(filepath, "ligneAssemblage");
-    FILE *fp = loadFile(linePath); //
-    FILE *fp2 = loadFile(graphPath);
+    char *exclusionPath = catPath(filepath, "exclusions.txt");
+    char *precedencePath = catPath(filepath, "precedences.txt");
+    char *operationPath = catPath(filepath, "operations.txt");
+    char *cycleTimePath = catPath(filepath, "temps_cycle.txt");
 
     handleMalloc(line);
-    getAllOpe(line, fp); //
-    getAllUnassociable(line, fp); //
-    createWorkStations(line);
-    line->graph = loadGraph(fp2);
-
+    if ((fp = fopen(cycleTimePath, "r")) == NULL)
+        return NULL;
+    fscanf(fp, "%lf", &line->cycleTime);
     fclose(fp);
-    fclose(fp2);
+    if (getOpe(line, operationPath) == -1)
+        return NULL;
+    if (getUnassociable(line, exclusionPath) == -1)
+        return NULL;
+    createWorkStations(line);
+    line->graph = loadGraph(line, precedencePath);
+    if (line->graph == NULL)
+        return NULL;
+
     free(filepath);
-    free(graphPath);
-    free(linePath);
+    free(exclusionPath);
+    free(precedencePath);
+    free(operationPath);
+    free(cycleTimePath);
 
     return line;
 }

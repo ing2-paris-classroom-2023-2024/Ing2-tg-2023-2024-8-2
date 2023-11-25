@@ -8,21 +8,27 @@ int main(void)
     assemblyLine_t *line;
     int choice;
     bool isSortByAssociable, isSortByTime, isSortByPred;
-    bool isAllocated = false;
+    bool isAllocated = false, badPath = false;
 
     while (choice != 6) {
         isSortByAssociable = false;
         isSortByPred = false;
         isSortByTime = false;
-        choice = getChoice();
+        choice = getChoice(badPath);
 
         switch (choice)
         {
         case 1:
-            if (isAllocated)
+            if (isAllocated && !badPath)
                 freeAssemblyLine(line);
             line = loadAssemblyLine();
-            isAllocated = true;
+            if (line == NULL) {
+                badPath = true;
+                isAllocated = false;
+            } else {
+                badPath = false;
+                isAllocated = true;
+            }
             break;
             
         case 2:

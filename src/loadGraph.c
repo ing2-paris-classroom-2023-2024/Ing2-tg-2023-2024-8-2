@@ -93,12 +93,19 @@ char *getDirectory(void)
     return filepath;
 }
 
-graphe_t *loadGraph(FILE *fp)
+graphe_t *loadGraph(assemblyLine_t *line, char *filepath)
 {
     graphe_t *graphe = malloc(sizeof(graphe_t));
+    int nbLine = getNbLine(filepath);
+    FILE *fp = fopen(filepath, "r");
 
     handleMalloc(graphe);
-    fscanf(fp, "%d", &graphe->ordre);
+    if (fp == NULL || nbLine == -1) {
+        free(graphe);
+        return NULL;
+    }
+
+    graphe->ordre = line->nbOpe;
     graphe->sommets = malloc(sizeof(sommet_t *) * (graphe->ordre + 1));
     handleMalloc(graphe->sommets);
     graphe->sommets[graphe->ordre] = NULL;
@@ -108,11 +115,12 @@ graphe_t *loadGraph(FILE *fp)
         handleMalloc(graphe->sommets[i]);
         graphe->sommets[i]->couleur = 0;
         graphe->sommets[i]->deg = 0;
-        fscanf(fp, "%d", &graphe->sommets[i]->id);
+        graphe->sommets[i]->id = line->ope[i]->id;
     }
-    fscanf(fp, "%d", &graphe->taille);
+    graphe->taille = nbLine;
 
     initGraph(graphe, fp);
+    fclose(fp);
 
     return graphe;
 }

@@ -43,13 +43,15 @@ void getConstraints(bool *isSortByAssociable, bool *isSortByTime, bool *isSortBy
     } while (!isValidInput);
 }
 
-int getChoice(void)
+int getChoice(bool badPath)
 {
     int choice;
 
     do {
         system("cls");
         displayLogoECE();
+        if (badPath)
+            printColor(RED, "\n\nImpossible de charger la ligne d'assemblage");
         printColor(GREEN, "\n\nMenu :\n\n");
         printColor(CYAN, "   1 - ");
         printf("Charger une ligne d'assemblage\n\n");

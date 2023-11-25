@@ -23,7 +23,7 @@ double sortByCycleTime(assemblyLine_t *line, bool isSortByAssociable);
 double kahnAlgorithm(assemblyLine_t *line, bool isSortByTime, bool isSortByAssociable);
 
 // loadGraph
-graphe_t *loadGraph(FILE *fp);
+graphe_t *loadGraph(assemblyLine_t *line, char *filepath);
 sommet_t *getSommetById(sommet_t **sommets, int id);
 void resetDeg(graphe_t *graph);
 
@@ -31,6 +31,9 @@ void resetDeg(graphe_t *graph);
 assemblyLine_t *loadAssemblyLine(void);
 void createWorkStations(assemblyLine_t *line);
 char *catPath(char *str1, char *str2);
+int getNbLine(char *filepath);
+
+int getIndexById(ope_t **ope, int id);
 
 // linkedList
 maillon_t *addMaillon(maillon_t *maillon, ope_t *ope);
@@ -44,7 +47,7 @@ void freeGraph(graphe_t *graphe);
 
 // menu
 void getConstraints(bool *isSortByAssociable, bool *isSortByTime, bool *isSortByPred);
-int getChoice(void);
+int getChoice(bool badPath);
 void displayConstraints(assemblyLine_t *line,  bool isSortByAssociable, bool isSortByTime, bool isSortByPred);
 void getCycleTime(assemblyLine_t *line);
 void getBestLoss(assemblyLine_t *line);
