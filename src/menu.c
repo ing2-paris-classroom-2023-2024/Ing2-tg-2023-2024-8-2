@@ -183,7 +183,7 @@ void getBestLoss(assemblyLine_t *line)
     for (int i = 0; i < 7; i++) {
         if (results[i] == results[0])
             printf("\033[1;36m");
-        printf("%d - %s%.2f\n\n", i + 1, sentences[i], results[i]);
+        printf("%d - %s%.2f%%\n\n", i + 1, sentences[i], results[i]);
         printf("\033[0;37m");
     }
     gets(&c);

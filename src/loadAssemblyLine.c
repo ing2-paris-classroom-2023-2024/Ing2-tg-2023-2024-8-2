@@ -74,6 +74,7 @@ int getOpe(assemblyLine_t *line, char *filepath)
         line->ope[i] = malloc(sizeof(ope_t));
         handleMalloc(line->ope[i]);
         fscanf(fp, "%d%lf", &line->ope[i]->id, &line->ope[i]->time);
+        line->ope[i]->index = i;
     }
     fclose(fp);
     

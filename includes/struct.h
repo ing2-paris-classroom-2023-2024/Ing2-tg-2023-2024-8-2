@@ -7,6 +7,7 @@
 typedef struct ope_s
 {
     int id;
+    int index;
     double time;
 } ope_t;
 

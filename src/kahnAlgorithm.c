@@ -4,12 +4,9 @@
 
 ope_t *getOpeById(ope_t **ope, int id)
 {
-    for (int i = 0; ope[i] != NULL; i++)
-        if (ope[i]->id == id)
-            return ope[i];
+    int index = getIndexById(ope, id);
 
-    printf("Exit Failure: operation with ID: %d doesn't exist\n", id);
-    exit(EXIT_FAILURE);
+    return ope[index];
 }
 
 maillon_t *removeMaillon(maillon_t *file)
@@ -27,14 +24,14 @@ int isAssociable(maillon_t *file, assemblyLine_t *line, ope_t *currOpe, bool isS
     maillon_t *tmpMaillon = file;
 
     while (tmpMaillon != NULL) {
-        if (line->unassociable[tmpMaillon->ope->id - 1][currOpe->id - 1])
+        if (line->unassociable[tmpMaillon->ope->index][currOpe->index])
             return 0;
         tmpMaillon = tmpMaillon->next;
     }
 
     tmpMaillon = line->workStation[currWS]->ope;
     while (isSortByTime && tmpMaillon != NULL) {
-        if (line->unassociable[tmpMaillon->ope->id - 1][currOpe->id - 1])
+        if (line->unassociable[tmpMaillon->ope->index][currOpe->index])
             return 0;
         tmpMaillon = tmpMaillon->next;
     }
@@ -80,6 +77,7 @@ double kahnAlgorithm(assemblyLine_t *line, bool isSortByTime, bool isSortByAssoc
     ope_t *tmpOpe, **tmpArrayOpe;
     sommet_t *tmpSommet;
     maillon_t *file;
+    printf("oui\n");
 
     while (!isFinish) {
         isFinish = true;

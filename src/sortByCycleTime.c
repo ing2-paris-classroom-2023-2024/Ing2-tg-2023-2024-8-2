@@ -6,7 +6,7 @@ int isAssociable2(bool **unassociable, workStation_t *workStation, ope_t *ope, i
     maillon_t *tmpMaillon = workStation->ope;
 
     while (tmpMaillon != NULL) {
-        if (unassociable[ope->id - 1][tmpMaillon->ope->id - 1])
+        if (unassociable[ope->index][tmpMaillon->ope->index])
             return 0;
         tmpMaillon = tmpMaillon->next;
     }
