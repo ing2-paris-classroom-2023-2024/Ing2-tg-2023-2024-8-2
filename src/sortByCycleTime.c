@@ -19,7 +19,7 @@ int isAssociable2(bool **unassociable, workStation_t *workStation, ope_t *ope, i
 }
 
 double sortByCycleTime(assemblyLine_t *line, bool isSortByAssociable) // Formulation du candidat le plus grand
-{
+{ // trie les opérations en appliquant contrainte de temps de cycle
     int currWS = 0, nbStation = 0, nbOpeSorted = 0;
     int *idSorted = malloc(sizeof(int) * line->nbOpe);
     double totalTime = 0.00;
@@ -38,7 +38,7 @@ double sortByCycleTime(assemblyLine_t *line, bool isSortByAssociable) // Formula
         for (int i = 0; i < line->nbOpe; i++) {
             if (!isSortByAssociable || (isSortByAssociable && isAssociable2(line->unassociable, line->workStation[currWS], allOpe[i], idSorted, nbOpeSorted))) {
                 if (line->workStation[currWS]->time + allOpe[i]->time > line->cycleTime)
-                    currWS++;
+                    currWS++; // Change de station si temps de cycle dépassé
                 line->workStation[currWS]->ope = addMaillon(line->workStation[currWS]->ope, allOpe[i]);
                 line->workStation[currWS]->time += allOpe[i]->time;
                 idSorted[nbOpeSorted] = allOpe[i]->id;
@@ -58,5 +58,5 @@ double sortByCycleTime(assemblyLine_t *line, bool isSortByAssociable) // Formula
         totalTime += line->workStation[i]->time;
     }
     
-    return getLoss(line, nbStation, totalTime);
+    return getLoss(line, nbStation, totalTime); // Retourne la perte d'équilibrage
 }

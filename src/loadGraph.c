@@ -4,7 +4,7 @@
 #include <dirent.h>
 #include "header.h"
 
-void resetDeg(graphe_t *graph)
+void resetDeg(graphe_t *graph) // Re-initialise les degrés des sommets d'un graphe
 {
     arc_t *tmpArc;
 
@@ -20,7 +20,7 @@ void resetDeg(graphe_t *graph)
     }
 }
 
-arc_t *addArc(arc_t *arc, sommet_t *origin, sommet_t *nextNode)
+arc_t *addArc(arc_t *arc, sommet_t *origin, sommet_t *nextNode) // Ajoute un arc à un sommet
 {
     arc_t *tmpArc = arc;
     
@@ -55,7 +55,7 @@ sommet_t *getSommetById(sommet_t **sommets, int id)
     exit(EXIT_FAILURE);
 }
 
-void initGraph(graphe_t *graphe, FILE *fp)
+void initGraph(graphe_t *graphe, FILE *fp) // Initialise un graphe
 {
     int id1, id2;
     sommet_t *currSommet, *nextSommet;
@@ -70,7 +70,7 @@ void initGraph(graphe_t *graphe, FILE *fp)
     }
 }
 
-char *getDirectory(void)
+char *getDirectory(void) // Retourne le chemin vers un dossier existant
 {
     DIR *d;
     char *filepath = malloc(sizeof(char) * 100);
@@ -88,14 +88,14 @@ char *getDirectory(void)
     return filepath;
 }
 
-graphe_t *loadGraph(assemblyLine_t *line, char *filepath)
+graphe_t *loadGraph(assemblyLine_t *line, char *filepath) // Charge un graphe en mémoire
 {
     graphe_t *graphe = malloc(sizeof(graphe_t));
-    int nbLine = getNbLine(filepath);
+    int nbLine = getNbLine(filepath); // Nombre de ligne du fichier
     FILE *fp = fopen(filepath, "r");
 
     handleMalloc(graphe);
-    if (fp == NULL || nbLine == -1) {
+    if (fp == NULL || nbLine == -1) { // Si le fichier n'est pas en norme
         free(graphe);
         return NULL;
     }
@@ -105,7 +105,7 @@ graphe_t *loadGraph(assemblyLine_t *line, char *filepath)
     handleMalloc(graphe->sommets);
     graphe->sommets[graphe->ordre] = NULL;
 
-    for (int i = 0; i < graphe->ordre; i++) {
+    for (int i = 0; i < graphe->ordre; i++) { // Init
         graphe->sommets[i] = malloc(sizeof(sommet_t));
         handleMalloc(graphe->sommets[i]);
         graphe->sommets[i]->couleur = 0;

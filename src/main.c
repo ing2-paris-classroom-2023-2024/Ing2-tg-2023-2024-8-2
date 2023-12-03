@@ -14,14 +14,14 @@ int main(void)
         isSortByAssociable = false;
         isSortByPred = false;
         isSortByTime = false;
-        choice = getChoice(badPath);
+        choice = getChoice(badPath); // Retourne le choix de l'utilisateur
 
         switch (choice)
         {
         case 1:
             if (isAllocated && !badPath)
-                freeAssemblyLine(line);
-            line = loadAssemblyLine();
+                freeAssemblyLine(line); // Libère une ligne d'assemblage
+            line = loadAssemblyLine(); // Charge une nouvelle ligne d'assemblage
             if (line == NULL) {
                 badPath = true;
                 isAllocated = false;
@@ -33,24 +33,24 @@ int main(void)
             
         case 2:
             if (isAllocated) {
-                getConstraints(&isSortByAssociable, &isSortByTime, &isSortByPred);
-                displayConstraints(line, isSortByAssociable, isSortByTime, isSortByPred);
+                getConstraints(&isSortByAssociable, &isSortByTime, &isSortByPred); // Retourne les contraintes choisis par l'utilisateur
+                displayConstraints(line, isSortByAssociable, isSortByTime, isSortByPred); // Applique les contraintes et les affiche
             }
             break;
         
         case 3:
             if (isAllocated)
-                getBestLoss(line);
+                getBestLoss(line); // Test et affiche toutes les contraintes en trouvant les meilleures
             break;
 
         case 4:
             if (isAllocated)
-                getCycleTime(line);
+                getCycleTime(line); // Change le temps de cycle de la ligne d'asseblage
             break;
 
         case 5:
             if (isAllocated)
-                displayLineInfos(line);
+                displayLineInfos(line); // Affiche les infos d'une ligne d'assemblage
             break;
         
         default:
@@ -58,7 +58,7 @@ int main(void)
         }
     }
     if (isAllocated)
-        freeAssemblyLine(line);
+        freeAssemblyLine(line); // Libère la ligne d'assemblage
 
     return 0;
 }

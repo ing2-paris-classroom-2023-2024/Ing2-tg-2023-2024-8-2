@@ -1,7 +1,7 @@
 #include <stdlib.h>
 #include "header.h"
 
-void freeWorkStation(assemblyLine_t *line)
+void freeWorkStation(assemblyLine_t *line) // Libère les stations de travail
 {
     maillon_t *tmpMaillon, *tmpMaillon2;
     bool endToFree = false;
@@ -22,7 +22,7 @@ void freeWorkStation(assemblyLine_t *line)
     free(line->workStation);
 }
 
-void freeGraph(graphe_t *graphe)
+void freeGraph(graphe_t *graphe) // Libère un graphe
 {
     arc_t *tmpArc, *tmpArc2;
 
@@ -45,7 +45,7 @@ void freeGraph(graphe_t *graphe)
     free(graphe);
 }
 
-void freeAssemblyLine(assemblyLine_t *line)
+void freeAssemblyLine(assemblyLine_t *line) // Libère une ligne d'assemblage
 {
     maillon_t *tmpMaillon, *tmpMaillon2;
     bool endToFree = false;

@@ -16,17 +16,14 @@ void insertToList(maillon_t **tete, maillon_t *nouveauMaillon)
         // Trouver le maillon après lequel insérer le nouveau maillon
         courant = *tete;
         while (courant->next != NULL && courant->next->ope->time < nouveauMaillon->ope->time)
-        {
             courant = courant->next;
-        }
 
         nouveauMaillon->next = courant->next;
         courant->next = nouveauMaillon;
     }
 }
 
-// Fonction pour trier la liste chaînée
-void sortList(maillon_t **tete)
+void sortList(maillon_t **tete) // Fonction pour trier la liste chaînée
 {
     maillon_t *listeTriee = NULL;
     maillon_t *courant = *tete;
@@ -45,7 +42,7 @@ void sortList(maillon_t **tete)
     *tete = listeTriee; // Mettre à jour la tête de la liste chaînée
 }
 
-int getLen(maillon_t *list)
+int getLen(maillon_t *list) // Retourne la longueur d'une liste chainée
 {
     int count = 0;
     maillon_t *tmpMaillon = list;
@@ -58,7 +55,17 @@ int getLen(maillon_t *list)
     return count;
 }
 
-maillon_t *addMaillon(maillon_t *maillon, ope_t *ope)
+maillon_t *removeMaillon(maillon_t *file) // Supprime un maillon d'une liste chainée
+{
+    maillon_t *tmpMaillon = file;
+
+    file = file->next;
+    free(tmpMaillon);
+
+    return file;
+}
+
+maillon_t *addMaillon(maillon_t *maillon, ope_t *ope) // Ajoute un maillon à la liste
 {
     maillon_t *tmpMaillon;
 

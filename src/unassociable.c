@@ -1,7 +1,7 @@
 #include <stdlib.h>
 #include "header.h"
 
-void getTimeStation(workStation_t **workStation)
+void getTimeStation(workStation_t **workStation) // Met à jour le temps de chaque station
 {
     double time = 0.00;
     maillon_t *tmpMaillon;

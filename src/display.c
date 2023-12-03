@@ -2,7 +2,7 @@
 #include <stdio.h>
 #include "header.h"
 
-void displayLogoECE(void)
+void displayLogoECE(void) // Affiche le logo ECE
 {
     printf("\033[1;31m");
     printf("\t\t____________________ ___________\n\t\t\\_   _____/\\_   ___ \\_   _____/\n\t\t |    __)_ /    \\  \\/ |    __)_ \n\t\t");
@@ -10,14 +10,14 @@ void displayLogoECE(void)
     printf("\033[0;37m");
 }
 
-void printColor(char *color, char *str)
+void printColor(char *color, char *str) // Affiche un text en couleur
 {
     printf("%s", color);
     printf("%s", str);
     printf("\033[0;37m");
 }
 
-double getLoss(assemblyLine_t *line, int nbStation, double totalTime)
+double getLoss(assemblyLine_t *line, int nbStation, double totalTime) // Calcul la perte d'équilibrage
 {
     double loss = (1.00 - (totalTime / (nbStation * line->cycleTime))) * 100;
 
@@ -27,7 +27,7 @@ double getLoss(assemblyLine_t *line, int nbStation, double totalTime)
     return loss;
 }
 
-void displayWorkStation(assemblyLine_t *line)
+void displayWorkStation(assemblyLine_t *line) // Affiche une ligne d'assemblage
 {
     maillon_t *tmpMaillon;
     int nbStation = 0;
@@ -59,7 +59,7 @@ void displayWorkStation(assemblyLine_t *line)
     }
 }
 
-void diplayGraph(graphe_t *graph)
+void diplayGraph(graphe_t *graph) // Affiche un graphe
 {
     arc_t *tmpArc;
     
@@ -74,7 +74,7 @@ void diplayGraph(graphe_t *graph)
     }
 }
 
-void displayLineInfos(assemblyLine_t *line)
+void displayLineInfos(assemblyLine_t *line) // Affiche les informations d'une ligne d'assemblage
 {
     char c;
     int count = 0;

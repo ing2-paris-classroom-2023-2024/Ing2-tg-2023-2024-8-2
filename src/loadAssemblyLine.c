@@ -5,7 +5,7 @@
 #include <fcntl.h>
 #include "header.h"
 
-char *catPath(char *str1, char *str2)
+char *catPath(char *str1, char *str2) // Assemble 2 chemin d'accès en une seule string
 {
     int len = strlen(str1);
     int len2 = strlen(str2);
@@ -19,7 +19,7 @@ char *catPath(char *str1, char *str2)
     return fullPath;
 }
 
-int getNbLine(char *filepath)
+int getNbLine(char *filepath) // Retourne le nombre de ligne d'un fichier
 {
     struct stat sb;
     ssize_t rd;
@@ -57,7 +57,7 @@ int getNbLine(char *filepath)
     return count;
 }
 
-int getOpe(assemblyLine_t *line, char *filepath)
+int getOpe(assemblyLine_t *line, char *filepath) // Remplit les opérations à partir d'un fichier conf
 {
     int nbLine = getNbLine(filepath);
     FILE *fp = fopen(filepath, "r");
@@ -81,7 +81,7 @@ int getOpe(assemblyLine_t *line, char *filepath)
     return 0;
 }
 
-int getIndexById(ope_t **ope, int id)
+int getIndexById(ope_t **ope, int id) // Retourne l'index d'une opération à partir d'un id
 {
     for (int i = 0; ope[i] != NULL; i++)
         if (ope[i]->id == id)
@@ -91,7 +91,7 @@ int getIndexById(ope_t **ope, int id)
     exit(EXIT_FAILURE);
 }
 
-int getUnassociable(assemblyLine_t *line, char *filepath)
+int getUnassociable(assemblyLine_t *line, char *filepath) // Remplit les exclusions à partir de fichier conf
 {
     int nbLine = getNbLine(filepath);
     FILE *fp = fopen(filepath, "r");
@@ -122,7 +122,7 @@ int getUnassociable(assemblyLine_t *line, char *filepath)
     return 0;
 }
 
-void createWorkStations(assemblyLine_t *line)
+void createWorkStations(assemblyLine_t *line) // Créer les Work Station
 {
     line->workStation = malloc(sizeof(workStation_t *) * (line->nbOpe + 1));
     handleMalloc(line->workStation);
@@ -135,7 +135,7 @@ void createWorkStations(assemblyLine_t *line)
     }
 }
 
-assemblyLine_t *loadAssemblyLine(void) // Fonction à aménager -> nouveau sujet
+assemblyLine_t *loadAssemblyLine(void) // Charge une nouvelle ligne d'assemblage
 {
     assemblyLine_t *line = malloc(sizeof(assemblyLine_t));
     FILE *fp;

@@ -3,7 +3,7 @@
 #include "header.h"
 
 void getConstraints(bool *isSortByAssociable, bool *isSortByTime, bool *isSortByPred)
-{
+{ // Obtention des contraintes choisis par l'utilisateur
     int choice, tmpChoice;
     bool isValidInput;
 
@@ -43,7 +43,7 @@ void getConstraints(bool *isSortByAssociable, bool *isSortByTime, bool *isSortBy
     } while (!isValidInput);
 }
 
-int getChoice(bool badPath)
+int getChoice(bool badPath) // Obtention du choix du menu principale
 {
     int choice;
 
@@ -72,7 +72,7 @@ int getChoice(bool badPath)
 }
 
 void displayConstraints(assemblyLine_t *line,  bool isSortByAssociable, bool isSortByTime, bool isSortByPred)
-{
+{ // Execute et affiche les contraintes choisis
     char c;
 
     if (isSortByAssociable && !isSortByPred && !isSortByTime)
@@ -94,7 +94,7 @@ void displayConstraints(assemblyLine_t *line,  bool isSortByAssociable, bool isS
 }
 
 void getCycleTime(assemblyLine_t *line)
-{
+{ // Met à jour le temps de cycle 
     int min, nbPiece;
     char c;
     bool validInput, tooLittleTime = false;
@@ -136,7 +136,7 @@ void getCycleTime(assemblyLine_t *line)
 }
 
 void getBestLoss(assemblyLine_t *line)
-{
+{ // Trouve les meilleures contraintes automatiquement
     double results[6];
     char c;
     char sentences[6][85] = {

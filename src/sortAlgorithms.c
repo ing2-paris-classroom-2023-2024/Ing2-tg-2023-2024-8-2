@@ -2,7 +2,7 @@
 #include <string.h>
 #include "header.h"
 
-void bubbleSort(double arr[], char str[6][85])
+void bubbleSort(double arr[], char str[6][85]) // Tri à bulle
 {
     bool sorted = false;
     double tmpVal;
@@ -24,7 +24,7 @@ void bubbleSort(double arr[], char str[6][85])
     }
 }
 
-void quickSort(ope_t **ope, int left, int right)
+void quickSort(ope_t **ope, int left, int right) // Tri rapide
 {
     int i = left, j = right;
     ope_t *temp;

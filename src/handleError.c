@@ -1,6 +1,6 @@
 #include <stdlib.h>
 
-void handleMalloc(void *ptr)
+void handleMalloc(void *ptr) // Verifie si un pointeur est correctement alloué
 {
     if (ptr == NULL) {
         printf("Exit Failure: malloc failed\n");
