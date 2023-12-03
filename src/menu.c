@@ -137,11 +137,10 @@ void getCycleTime(assemblyLine_t *line)
 
 void getBestLoss(assemblyLine_t *line)
 {
-    double results[7];
+    double results[6];
     char c;
-    char sentences[7][85] = {
+    char sentences[6][85] = {
         {"   Exclusion -> Perte d'Equilibrage de \0"},
-        {"   Precedence -> Perte d'Equilibrage de \0"},
         {"   Temps de Cycle -> Perte d'Equilibrage de \0"},
         {"   Precedence + Temps de Cycle -> Perte d'Equilibrage de \0"},
         {"   Precedence + Exclusion -> Perte d'Equilibrage de \0"},
@@ -152,25 +151,22 @@ void getBestLoss(assemblyLine_t *line)
     results[0] = sortByUnassociable(line);
     freeWorkStation(line);
     createWorkStations(line);
-    results[1] = kahnAlgorithm(line, false, false);
+    resetDeg(line->graph);
+    results[1] = sortByCycleTime(line, false);
+    freeWorkStation(line);
+    createWorkStations(line);
+    results[2] = kahnAlgorithm(line, true, false);
     freeWorkStation(line);
     createWorkStations(line);
     resetDeg(line->graph);
-    results[2] = sortByCycleTime(line, false);
-    freeWorkStation(line);
-    createWorkStations(line);
-    results[3] = kahnAlgorithm(line, true, false);
+    results[3] = kahnAlgorithm(line, false, true);
     freeWorkStation(line);
     createWorkStations(line);
     resetDeg(line->graph);
-    results[4] = kahnAlgorithm(line, false, true);
+    results[4] = sortByCycleTime(line, true);
     freeWorkStation(line);
     createWorkStations(line);
-    resetDeg(line->graph);
-    results[5] = sortByCycleTime(line, true);
-    freeWorkStation(line);
-    createWorkStations(line);
-    results[6] = kahnAlgorithm(line, true, true);
+    results[5] = kahnAlgorithm(line, true, true);
     freeWorkStation(line);
     createWorkStations(line);
     resetDeg(line->graph);
@@ -180,7 +176,7 @@ void getBestLoss(assemblyLine_t *line)
     system("cls");
     displayLogoECE();
     printColor(GREEN, "\n\nMeilleures Contraintes:\n\n");
-    for (int i = 0; i < 7; i++) {
+    for (int i = 0; i < 6; i++) {
         if (results[i] == results[0])
             printf("\033[1;36m");
         printf("%d - %s%.2f%%\n\n", i + 1, sentences[i], results[i]);

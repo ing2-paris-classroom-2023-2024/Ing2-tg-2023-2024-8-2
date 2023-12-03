@@ -54,7 +54,6 @@ double sortByUnassociable(assemblyLine_t *line)
     }
 
     for (int i = 0; i < line->nbOpe; i++) {
-
         do {
             currWS++;
             unassociable = false;
@@ -79,5 +78,6 @@ double sortByUnassociable(assemblyLine_t *line)
         nbStation++;
         totalTime += line->workStation[i]->time;
     }
+    
     return getLoss(line, nbStation, totalTime);
 }

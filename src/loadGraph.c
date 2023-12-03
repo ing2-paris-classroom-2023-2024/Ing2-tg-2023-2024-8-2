@@ -20,18 +20,17 @@ void resetDeg(graphe_t *graph)
     }
 }
 
-arc_t *addArc(sommet_t *origin, sommet_t *nextNode)
+arc_t *addArc(arc_t *arc, sommet_t *origin, sommet_t *nextNode)
 {
-    arc_t *tmpArc = origin->arc;
+    arc_t *tmpArc = arc;
     
-    nextNode->deg += 1;
-    if (origin->arc == NULL){
-        origin->arc = malloc(sizeof(arc_t));
-        handleMalloc(origin->arc);
-        origin->arc->sommet = nextNode;
-        origin->arc->next= NULL;
-        origin->arc->origin = origin;
-        return origin->arc;
+    if (arc == NULL){
+        arc = malloc(sizeof(arc_t));
+        handleMalloc(arc);
+        arc->sommet = nextNode;
+        arc->next= NULL;
+        arc->origin = origin;
+        return arc;
     }
 
     while (tmpArc->next != NULL)
@@ -43,7 +42,7 @@ arc_t *addArc(sommet_t *origin, sommet_t *nextNode)
     tmpArc->next->sommet = nextNode;
     tmpArc->next->origin = origin;
 
-    return origin->arc;
+    return arc;
 }
 
 sommet_t *getSommetById(sommet_t **sommets, int id)
@@ -61,17 +60,13 @@ void initGraph(graphe_t *graphe, FILE *fp)
     int id1, id2;
     sommet_t *currSommet, *nextSommet;
 
-    for (int i = 0; i < graphe->ordre; i++) {
-        graphe->sommets[i]->arc = NULL;
-        graphe->sommets[i]->dist = MAX_INT;
-        graphe->sommets[i]->pred = -1;
-    }
-
     for (int i = 0; i < graphe->taille; i++) {
         fscanf(fp, "%d%d", &id1, &id2);
         currSommet = getSommetById(graphe->sommets, id1);
         nextSommet = getSommetById(graphe->sommets, id2);
-        currSommet->arc = addArc(currSommet, nextSommet);
+        currSommet->arc = addArc(currSommet->arc, currSommet, nextSommet);
+        nextSommet->deg++;
+        nextSommet->listPred = addArc(nextSommet->listPred, nextSommet, currSommet);
     }
 }
 
@@ -115,6 +110,10 @@ graphe_t *loadGraph(assemblyLine_t *line, char *filepath)
         handleMalloc(graphe->sommets[i]);
         graphe->sommets[i]->couleur = 0;
         graphe->sommets[i]->deg = 0;
+        graphe->sommets[i]->listPred = NULL;
+        graphe->sommets[i]->arc = NULL;
+        graphe->sommets[i]->dist = MAX_INT;
+        graphe->sommets[i]->pred = -1;
         graphe->sommets[i]->id = line->ope[i]->id;
     }
     graphe->taille = nbLine;

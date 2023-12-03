@@ -33,6 +33,12 @@ void freeGraph(graphe_t *graphe)
             free(tmpArc);
             tmpArc = tmpArc2;
         }
+        tmpArc = graphe->sommets[i]->listPred;
+        while (tmpArc != NULL) {
+            tmpArc2 = tmpArc->next;
+            free(tmpArc);
+            tmpArc = tmpArc2;
+        }
         free(graphe->sommets[i]);
     }
     free(graphe->sommets);

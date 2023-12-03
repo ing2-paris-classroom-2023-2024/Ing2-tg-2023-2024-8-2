@@ -13,6 +13,7 @@ typedef struct sommet_s {
     short couleur;
     int pred;
     int dist;
+    arc_t *listPred;
     arc_t *arc;
 } sommet_t;
 

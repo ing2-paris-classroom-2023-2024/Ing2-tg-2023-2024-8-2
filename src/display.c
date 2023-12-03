@@ -19,7 +19,12 @@ void printColor(char *color, char *str)
 
 double getLoss(assemblyLine_t *line, int nbStation, double totalTime)
 {
-    return (1.00 - (totalTime / (nbStation * line->cycleTime))) * 100;
+    double loss = (1.00 - (totalTime / (nbStation * line->cycleTime))) * 100;
+
+    if (loss < 0.00)
+        return 0.00;
+    
+    return loss;
 }
 
 void displayWorkStation(assemblyLine_t *line)

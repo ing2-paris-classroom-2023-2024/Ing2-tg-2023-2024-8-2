@@ -2,7 +2,7 @@
 #include <string.h>
 #include "header.h"
 
-void bubbleSort(double arr[], char str[7][85])
+void bubbleSort(double arr[], char str[6][85])
 {
     bool sorted = false;
     double tmpVal;
@@ -10,7 +10,7 @@ void bubbleSort(double arr[], char str[7][85])
 
     while (!sorted) {
         sorted = true;
-        for (int i = 0; i < 6; i++) {
+        for (int i = 0; i < 5; i++) {
             if (arr[i] > arr[i + 1]) {
                 sorted = false;
                 tmpVal = arr[i];
